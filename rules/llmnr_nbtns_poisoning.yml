@@ -1,0 +1,34 @@
+title: LLMNR and NBT-NS Responder Traffic
+id: 1deb41da-fad0-4fa8-83b4-4616a18eb3ec
+status: experimental
+description: >
+  Detects a host sending LLMNR (UDP 5355) or NBT-NS (UDP 137) name-service
+  responses, which is how a poisoning tool such as Responder answers broadcast
+  name lookups to capture credentials. Best used in an environment where LLMNR
+  and NBT-NS are meant to be disabled, so any such traffic is suspicious. Relies
+  on Sysmon network-connection logging (Event ID 3).
+references:
+  - https://attack.mitre.org/techniques/T1557/001/
+  - https://github.com/lgandx/Responder
+author: Md Abu Bakar Siddique (ruxcipher)
+date: 2026/10/25
+tags:
+  - attack.credential_access
+  - attack.t1557.001
+logsource:
+  product: windows
+  category: network_connection
+detection:
+  selection_llmnr:
+    Initiated: 'true'
+    Protocol: 'udp'
+    DestinationPort: 5355
+  selection_nbtns:
+    Initiated: 'true'
+    Protocol: 'udp'
+    DestinationPort: 137
+  condition: selection_llmnr or selection_nbtns
+falsepositives:
+  - Normal Windows name resolution where LLMNR and NBT-NS are still enabled.
+  - WINS or legacy NetBIOS environments.
+level: medium
