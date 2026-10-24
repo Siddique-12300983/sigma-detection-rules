@@ -1,0 +1,14 @@
+# Editor / OS
+*.swp
+.vscode/
+.idea/
+.DS_Store
+
+# Python (for the validator)
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Claude local notes
+CLAUDE.local.md

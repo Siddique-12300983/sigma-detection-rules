@@ -1,0 +1,44 @@
+title: Suspicious Scheduled Task Creation
+id: 097fb637-6670-4f28-a3eb-9f39d6b42c62
+status: experimental
+description: >
+  Detects creation of a scheduled task (Event ID 4698) whose definition runs a
+  command interpreter or script host, or uses an encoded or download-and-run
+  PowerShell command. Scheduled tasks are a common persistence and execution
+  mechanism. The command content is matched inside the task definition recorded
+  in the event.
+references:
+  - https://attack.mitre.org/techniques/T1053/005/
+  - https://learn.microsoft.com/en-us/windows/security/threat-protection/auditing/event-4698
+author: Md Abu Bakar Siddique (ruxcipher)
+date: 2026/10/25
+tags:
+  - attack.persistence
+  - attack.execution
+  - attack.t1053.005
+logsource:
+  product: windows
+  service: security
+detection:
+  selection:
+    EventID: 4698
+  suspicious:
+    TaskContent|contains:
+      - 'cmd.exe /c'
+      - 'powershell'
+      - 'pwsh'
+      - 'mshta'
+      - 'wscript'
+      - 'cscript'
+      - 'rundll32'
+      - 'regsvr32'
+      - '-enc'
+      - '-EncodedCommand'
+      - 'FromBase64String'
+      - 'DownloadString'
+      - 'IEX'
+      - 'Invoke-Expression'
+  condition: selection and suspicious
+falsepositives:
+  - Legitimate administrative or software-update tasks that call PowerShell or cmd.
+level: medium

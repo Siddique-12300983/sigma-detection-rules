@@ -1,0 +1,36 @@
+title: Kerberoasting via RC4 Service Ticket Request
+id: 49a2781a-161f-4020-a6d4-b5729bb37cb0
+status: experimental
+description: >
+  Detects a Kerberos service ticket (TGS-REQ) issued with RC4 encryption
+  (0x17) for a user service account. RC4 is the classic Kerberoasting
+  indicator because the resulting ticket is fast to crack offline. Computer
+  accounts and krbtgt are filtered out. See the note in the repo README: on a
+  modern AES-only domain a real roast can appear as AES (0x12), so pair this
+  with the SPN fan-out behaviour rule.
+references:
+  - https://attack.mitre.org/techniques/T1558/003/
+  - https://learn.microsoft.com/en-us/windows/security/threat-protection/auditing/event-4769
+author: Md Abu Bakar Siddique (ruxcipher)
+date: 2026/10/25
+tags:
+  - attack.credential_access
+  - attack.t1558.003
+logsource:
+  product: windows
+  service: security
+detection:
+  selection:
+    EventID: 4769
+    TicketEncryptionType: '0x17'
+    # Status 0x0 means the ticket was issued, not refused.
+    Status: '0x0'
+  filter_machine:
+    ServiceName|endswith: '$'
+  filter_krbtgt:
+    ServiceName: 'krbtgt'
+  condition: selection and not filter_machine and not filter_krbtgt
+falsepositives:
+  - Legacy applications or appliances that still request RC4 service tickets.
+  - Environments where RC4 has not yet been disabled domain-wide.
+level: high
