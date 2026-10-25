@@ -10,7 +10,7 @@ description: >
 references:
   - https://attack.mitre.org/techniques/T1562/001/
   - https://learn.microsoft.com/en-us/microsoft-365/security/defender-endpoint/troubleshoot-microsoft-defender-antivirus
-author: Md Abu Bakar Siddique (ruxcipher)
+author: Md Abu Bakar Siddique (ruxchipher)
 date: 2026/10/25
 tags:
   - attack.defense_evasion

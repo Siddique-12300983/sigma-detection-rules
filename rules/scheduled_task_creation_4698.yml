@@ -10,7 +10,7 @@ description: >
 references:
   - https://attack.mitre.org/techniques/T1053/005/
   - https://learn.microsoft.com/en-us/windows/security/threat-protection/auditing/event-4698
-author: Md Abu Bakar Siddique (ruxcipher)
+author: Md Abu Bakar Siddique (ruxchipher)
 date: 2026/10/25
 tags:
   - attack.persistence
